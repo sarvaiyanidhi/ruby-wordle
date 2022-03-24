@@ -1,5 +1,23 @@
 class Wordle
 
+  class String 
+    def colorize(color_code)
+        "\e[#{color_code}m#{self}\e[0m"
+    end
+
+    def brown
+        colorize(33)
+    end
+
+    def green
+        colorize(32)
+    end
+
+    def grey
+        colorize(37)
+    end
+  end
+
   def game
     words = word_list
     total_turns = 6
@@ -22,8 +40,8 @@ class Wordle
       if @player_answer.empty? || @player_answer.size != 5
         puts "Invalid word! Please enter valid 5 letter word"
       else
-        validate_answer(@player_answer, @answer)
-        @wordle_view[@player_turn] = @player_answer
+        @updated_wordle_view = validate_answer(@player_answer, @answer)
+        @wordle_view[@player_turn] = @updated_wordle_view
         puts "Your answer \n"
         puts @wordle_view
         @player_turn += 1
@@ -41,6 +59,8 @@ class Wordle
 
     if player_answer == answer
       player_answer
+    else
+      
     end
   end
 
