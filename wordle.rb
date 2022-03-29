@@ -1,22 +1,24 @@
-class Wordle
+#!/usr/bin/env ruby
 
-  class String 
-    def colorize(color_code)
-        "\e[#{color_code}m#{self}\e[0m"
-    end
-
-    def brown
-        colorize(33)
-    end
-
-    def green
-        colorize(32)
-    end
-
-    def grey
-        colorize(37)
-    end
+class String 
+  def colorize(color_code)
+      "\e[#{color_code}m#{self}\e[0m"
   end
+
+  def brown
+      colorize(33)
+  end
+
+  def green
+      colorize(32)
+  end
+
+  def grey
+      colorize(37)
+  end
+end
+
+class Wordle
 
   def game
     words = word_list
@@ -39,15 +41,19 @@ class Wordle
 
       if @player_answer.empty? || @player_answer.size != 5
         puts "Invalid word! Please enter valid 5 letter word"
+      elsif @player_answer == @answer
+        @wordle_view[@player_turn] = @player_answer.split("").join(' ').green
+        puts "Your Wordle View Answer \n"
+        puts @wordle_view
+        exit
       else
-        @updated_wordle_view = validate_answer(@player_answer, @answer)
-        @wordle_view[@player_turn] = @updated_wordle_view
+        @updated_player_answer = check_chracter_color(@player_answer, @answer)
+        @wordle_view[@player_turn] = @updated_player_answer
         puts "Your answer \n"
         puts @wordle_view
         @player_turn += 1
       end
     end
-
   end
 
   def word_list
@@ -55,13 +61,19 @@ class Wordle
     words = File.readlines("dictionary.txt", chomp: true)
   end
 
-  def validate_answer(player_answer, answer)
-
-    if player_answer == answer
-      player_answer
+  def check_chracter_color(player_answer, answer)
+    updated_player_answer = ""    
+    player_answer.split('').each_with_index { |character, index|
+     if character == answer[index]
+      updated_player_answer += player_answer[index].green + " "
+    elsif player_answer.include?(answer[index])
+      updated_player_answer += player_answer[index].brown + " "
     else
-      
-    end
+      updated_player_answer += player_answer[index].grey + " "
+    end 
+    }
+    puts updated_player_answer
+    updated_player_answer
   end
 
 end
