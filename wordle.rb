@@ -39,6 +39,8 @@ class Wordle
       puts "Please guess your #{@player_turn + 1} word"
       @player_answer = gets.chomp().upcase
 
+      puts "---------------------------------------------"
+
       if @player_answer.empty? || @player_answer.size != 5
         puts "Invalid word! Please enter valid 5 letter word"
       elsif @player_answer == @answer
@@ -49,7 +51,7 @@ class Wordle
       else
         @updated_player_answer = check_chracter_color(@player_answer, @answer)
         @wordle_view[@player_turn] = @updated_player_answer
-        puts "Your answer \n"
+        puts "Your Wordle View Answer \n"
         puts @wordle_view
         @player_turn += 1
       end
@@ -66,13 +68,12 @@ class Wordle
     player_answer.split('').each_with_index { |character, index|
      if character == answer[index]
       updated_player_answer += player_answer[index].green + " "
-    elsif player_answer.include?(answer[index])
+    elsif answer.include?(character)
       updated_player_answer += player_answer[index].brown + " "
     else
       updated_player_answer += player_answer[index].grey + " "
     end 
     }
-    puts updated_player_answer
     updated_player_answer
   end
 
